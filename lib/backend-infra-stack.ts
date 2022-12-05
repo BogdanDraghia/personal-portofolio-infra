@@ -7,8 +7,6 @@ import s3 = require('aws-cdk-lib/aws-s3');
 export class BackendInfraStrack extends cdk.Stack {
     constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
-
-
         const executionRole = new iam.Role(this, 'EcsTaskExecutionRole', {
             roleName: 'ecs-crawler-task-execution-role',
             assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
@@ -19,7 +17,10 @@ export class BackendInfraStrack extends cdk.Stack {
           });
           
 
-        const vpc = new ec2.Vpc(this, 'MyVpc', { maxAzs: 2 });
+        const vpc = new ec2.Vpc(this, 'MyVpc',
+         { maxAzs: 1 ,
+          
+          natGateways: 0});
         const cluster = new ecs.Cluster(this, 'Cluster', { vpc });
         const taskDef = new ecs.FargateTaskDefinition(this, "MyTaskDefinition", {
             memoryLimitMiB: 512,
@@ -42,8 +43,9 @@ export class BackendInfraStrack extends cdk.Stack {
             assignPublicIp:true,
             cluster,
             taskDefinition: taskDef,
+            capacityProviderStrategies:[
+              {capacityProvider:'FARGATE_SPOT',weight:1},
+            ]
             });
     }
-
-
     }

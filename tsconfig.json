@@ -5,6 +5,7 @@
     "lib": [
       "es2020"
     ],
+    "outDir": "./built",
     "declaration": true,
     "strict": true,
     "noImplicitAny": true,
@@ -24,6 +25,7 @@
     ]
   },
   "exclude": [
+    "./built/**/*",
     "node_modules",
     "cdk.out"
   ]
