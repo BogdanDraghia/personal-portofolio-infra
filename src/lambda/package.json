@@ -1,0 +1,16 @@
+{
+    "name": "helper-lambda",
+    "version": "1.0.0",
+    "description": "lambda to get api from ecs ",
+    "main": "handler.js",
+    "scripts": {
+      "build": "tsc",
+      "watch": "tsc -w",
+      "test": "jest"
+    },
+    "dependencies": {
+      "aws-sdk": "^2.617.0"
+    },
+    "author": "",
+    "license": "ISC"
+  }
