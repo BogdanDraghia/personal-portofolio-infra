@@ -9,8 +9,9 @@ export class HelpersInfraStack extends cdk.Stack {
         super(scope, id, props);
 
         const lambdaPolicy = new PolicyStatement()
-        lambdaPolicy.addActions("ecs:*")
-        lambdaPolicy.addResources("arn:aws:ecs:eu-west-3:921323820524:cluster/fargate-spot")
+        lambdaPolicy.addActions("ecs:UpdateService","ecs:*")
+        lambdaPolicy.addResources("arn:aws:ecs:eu-west-3:921323820524:service/BackendInfraStrack-ClusterEB0386A7-Za5dwwmV8Avo/BackendInfraStrack-FargateServiceAC2B3B85-67P4fwdGkwNZ")
+
         const lambdaFunction = new lambda.Function(this,'ecs-helper-portofolio',
         {
             memorySize: 1024,
