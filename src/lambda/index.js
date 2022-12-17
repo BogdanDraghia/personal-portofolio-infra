@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const ecs = new AWS.ECS();
-
+const ec2 = new AWS.EC2();
 exports.handler = async (event, context) => {
   const query= event.queryStringParameters
   const path = event.requestContext.http.path
@@ -18,7 +18,7 @@ exports.handler = async (event, context) => {
         }
         break;
       case '/getip':
-        result = event
+        result = await getIpTask()
         break;
       default:
         throw new Error(`Unrecognized path: ${path}`)
@@ -42,8 +42,25 @@ exports.handler = async (event, context) => {
 };
 
 
-async function getIpTask (event) {
+async function getIpTask () {
   // Return the public ip from fargate task
+
+  let params = {
+    cluster:"BackendInfraStrack-ClusterEB0386A7-Za5dwwmV8Avo",
+    serviceName: "BackendInfraStrack-FargateServiceAC2B3B85-67P4fwdGkwNZ",
+  }
+  let listTasks = await ecs.listTasks(params).promise()
+  let arnRunningTask = listTasks.taskArns[0]
+  let describeTask = await ecs.describeTasks({
+    cluster:"BackendInfraStrack-ClusterEB0386A7-Za5dwwmV8Avo",
+    tasks:[arnRunningTask]
+  }).promise()
+  let EniValue = describeTask.tasks[0].attachments[0].details[1].value
+  let publicIp = await ec2.describeNetworkInterfaces({  NetworkInterfaceIds: [
+    EniValue
+ ]}).promise()
+
+  return publicIp.NetworkInterfaces[0].Association.PublicIp
 }
 
 async function startStopServiceTask (state){
