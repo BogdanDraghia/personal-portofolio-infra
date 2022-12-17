@@ -47,7 +47,7 @@ This creates a URL Lambda that will have two functions:
 
 - [x] Update Lambda URL to control Fargate tasks
 - [x] Change desired task count for ECS Fargate Service
-- [ ] Get IP of last created Fargate task
+- [x] Get IP of last created Fargate task
 - [ ] Return status of Service/Task
 
 #### Backend
