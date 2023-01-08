@@ -7,6 +7,9 @@ jobs:
   push_to_registry:
     name: Build and upload to ECR repository
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -16,7 +19,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::921323820524:role/role-ecr-github
           aws-region: eu-west-3
-          
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
