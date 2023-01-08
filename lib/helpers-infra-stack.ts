@@ -10,15 +10,14 @@ export class HelpersInfraStack extends cdk.Stack {
 
         const lambdaPolicy = new PolicyStatement()
         lambdaPolicy.addActions("ecs:UpdateService","ecs:*","ecs:ListTasks","ec2:DescribeNetworkInterfaces")
-        // lambdaPolicy.addResources("arn:aws:ecs:eu-west-3:921323820524:service/BackendInfraStrack-ClusterEB0386A7-Za5dwwmV8Avo/BackendInfraStrack-FargateServiceAC2B3B85-67P4fwdGkwNZ")
         lambdaPolicy.addResources("*")
-
         const lambdaFunction = new lambda.Function(this,'ecs-helper-portofolio',
         {
             memorySize: 1024,
             runtime: lambda.Runtime.NODEJS_16_X,
             code: lambda.Code.fromAsset(path.join(__dirname, "/../src/lambda")),
             handler: 'index.handler',
+            timeout: cdk.Duration.seconds(160),
             initialPolicy:[lambdaPolicy]
         })
         const lambdaURL = new lambda.CfnUrl(this,"url-lambda",{

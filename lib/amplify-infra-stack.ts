@@ -19,14 +19,22 @@ export class AmplifyInfraStack extends cdk.Stack {
               phases: {
                 preBuild: {
                   commands: [
-                    "npm ci"
+                    "npm ci",
+                    "yum install jq -y",
+                    "export BACKEND_URL=http://$(curl --request GET --url ${LAMBDA_URL}'/ecs?desiredRunning=run' | jq -r '.publicIp'):1337",
                   ]
                 },
                 build: {
                   commands: [
                     "npm run export"
                   ]
+                },
+                postBuild: {
+                  commands: [
+                    "curl --request GET --url ${LAMBDA_URL}'/ecs?desiredRunning=stop'"
+                  ]
                 }
+                
               },
               artifacts: {
                 baseDirectory: "out",

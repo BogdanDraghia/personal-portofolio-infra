@@ -8,8 +8,7 @@
     "build": "tsc ",
     "clean":"tsc --build --clean",
     "watch": "tsc -w",
-    "test": "jest",
-    "cdk": "cdk"
+    "test": "jest"
   },
   "devDependencies": {
     "@types/jest": "^27.5.2",
